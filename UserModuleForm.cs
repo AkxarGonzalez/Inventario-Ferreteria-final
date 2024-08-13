@@ -13,7 +13,7 @@ namespace Inventario_Ferreteria
 {
     public partial class UserModuleForm : Form
     {
-        SqlConnection conex = new SqlConnection(@"Data Source=DESKTOP-LH5HOO2\SQLEXPRESS;Initial Catalog=bd_ferreteria;Integrated Security=True");
+        SqlConnection conex = new SqlConnection(@"Data Source=SISTEMAS\SQLEXPRESS;Initial Catalog=bd_ferreteria;Integrated Security=True");
         SqlCommand cn = new SqlCommand();
 
       public UserModuleForm()
@@ -31,7 +31,7 @@ namespace Inventario_Ferreteria
 
             try
             {
-                if (txtContraseña.Text != txtContraseña.Text)
+                if (txtContraseña.Text != txtReContraseña.Text)
                 {
                     MessageBox.Show("La Contraseña no coincide","Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -43,6 +43,7 @@ namespace Inventario_Ferreteria
                     cn.Parameters.AddWithValue("@NombreCompleto", txtNombreCompleto.Text);
                     cn.Parameters.AddWithValue("@Contrasena", txtContraseña.Text);
                     cn.Parameters.AddWithValue("@Puesto", txtPuesto.Text);
+                    
                     conex.Open();
                     cn.ExecuteNonQuery();
                     conex.Close();
@@ -69,7 +70,7 @@ namespace Inventario_Ferreteria
             txtUsuario.Clear();
             txtNombreCompleto.Clear();
             txtContraseña.Clear();
-            txtContraseña.Clear();
+            txtReContraseña.Clear();
             txtPuesto.Clear();
         }
 
@@ -77,29 +78,32 @@ namespace Inventario_Ferreteria
         {
             try
             {
-                if (txtContraseña.Text != txtContraseña.Text)
+                if (txtContraseña.Text != txtReContraseña.Text)
                 {
-                    MessageBox.Show("La Contraseña no coincide", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("LA CONTRASEÑA NO ES CORRECTA", "ADVERTENCIA", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                if (MessageBox.Show("Estas seguro de actualizar este usuario?", "Actualizar Registro", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("¿Está seguro de que desea actualizar este usuario?", "Actualizar Registro" , MessageBoxButtons.YesNo,MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    cn = new SqlCommand("UPDATE Usuarios SET Nombre_Completo = @NombreCompleto,Contrasena=@Contrasena,Puesto=@Puesto WHERE Usuario LIKE '"+txtUsuario.Text +"' ", conex);
-                    cn.Parameters.AddWithValue("@NombreCompleto", txtNombreCompleto.Text);
+                    cn = new SqlCommand("UPDATE USUARIOS SET Nombre_Completo = @Nombre_Completo, Contrasena=@Contrasena, Puesto=@puesto WHERE usuario LIKE '" + txtUsuario.Text + "' ", conex);
+                    cn.Parameters.AddWithValue("@Nombre_Completo", txtNombreCompleto.Text);
                     cn.Parameters.AddWithValue("@Contrasena", txtContraseña.Text);
                     cn.Parameters.AddWithValue("@Puesto", txtPuesto.Text);
                     conex.Open();
                     cn.ExecuteNonQuery();
                     conex.Close();
-                    MessageBox.Show("El usuario ha sido actualizado exitosamente!!");
+                    MessageBox.Show("El Usuario ha sido actualizado!");
                     this.Dispose();
+
                 }
+                
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+
         }
     }
 }
